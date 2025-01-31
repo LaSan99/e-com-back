@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { GoogleGenerativeAI } = require("@google/generative-ai");
+const cors = require('cors');
 
 // Initialize Gemini API with error handling
 let genAI;
@@ -20,8 +21,20 @@ const SYSTEM_PROMPT = `You are an AI shopping assistant for a sneaker store. You
 
 Keep responses concise and focused on helping customers with their shopping experience.`;
 
+// Add CORS options specifically for chat routes
+const chatCorsOptions = {
+  origin: [
+    "https://e-com-front.netlify.app",
+    "http://localhost:5173",
+    /\.vercel\.app$/,
+    /\.netlify\.app$/
+  ],
+  methods: ["POST", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true
+};
 
-router.post("/", async (req, res) => {
+router.post("/", cors(chatCorsOptions), async (req, res) => {
   try {
     if (!genAI) {
       throw new Error("Gemini API not initialized");

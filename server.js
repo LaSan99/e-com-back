@@ -30,8 +30,10 @@ app.use(
       /\.netlify\.app$/, // Allow all netlify.app subdomains
     ],
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
+    allowedHeaders: ["Content-Type", "Authorization", "Access-Control-Allow-Origin"],
     credentials: true,
+    preflightContinue: false,
+    optionsSuccessStatus: 204
   })
 );
 app.use(express.json({ limit: "10mb" }));
@@ -51,6 +53,9 @@ app.use("/api/products", productRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/chat", chatRoutes);
+
+// Add a specific CORS handler for chat routes
+app.options('/api/chat', cors()); // Enable pre-flight for chat endpoints
 
 // Error handling middleware
 app.use((err, req, res, next) => {
