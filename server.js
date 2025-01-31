@@ -42,7 +42,7 @@ if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir, { recursive: true });
 }
 
-// Make sure to serve static files
+// Serve static files - this should come after CORS middleware
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // Routes
