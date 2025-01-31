@@ -22,7 +22,7 @@ connectDB();
 // Middleware
 app.use(
   cors({
-    origin: "http://localhost:5173", // Vite's default port
+    origin: "https://e-com-front.netlify.app", // Vite's default port
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
