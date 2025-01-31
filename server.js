@@ -22,7 +22,10 @@ connectDB();
 // Middleware
 app.use(
   cors({
-    origin: "https://e-com-front.netlify.app", // Vite's default port
+    origin: [
+      "https://e-com-front.netlify.app",
+      /\.vercel\.app$/  // Allow all vercel.app subdomains
+    ],
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
