@@ -51,10 +51,19 @@ router.post(
   upload.array("images", 5),
   async (req, res) => {
     try {
-      const imageUrls = req.files.map((file) => `/uploads/${file.filename}`);
+      // Log the request for debugging
+      console.log('Request body:', req.body);
+      console.log('Files:', req.files);
+
+      const imageUrls = req.files?.map((file) => `/uploads/${file.filename}`) || [];
 
       const productData = {
-        ...req.body,
+        name: req.body.name,
+        brand: req.body.brand,
+        description: req.body.description,
+        price: Number(req.body.price),
+        stock: Number(req.body.stock),
+        category: req.body.category,
         images: imageUrls,
         size: req.body.size
           .split(",")
@@ -65,6 +74,7 @@ router.post(
       const product = await Product.create(productData);
       res.status(201).json(product);
     } catch (error) {
+      console.error('Error creating product:', error);
       res.status(500).json({ message: error.message || "Server error" });
     }
   }

@@ -3,6 +3,7 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
 const path = require("path");
+const fs = require("fs");
 
 // Load env vars
 dotenv.config();
@@ -24,7 +25,9 @@ app.use(
   cors({
     origin: [
       "https://e-com-front.netlify.app",
-      /\.vercel\.app$/  // Allow all vercel.app subdomains
+      "http://localhost:5173", // Add local development URL
+      /\.vercel\.app$/,  // Allow all vercel.app subdomains
+      /\.netlify\.app$/, // Allow all netlify.app subdomains
     ],
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
@@ -33,14 +36,13 @@ app.use(
 );
 app.use(express.json({ limit: "10mb" }));
 
-// Create uploads directory if it doesn't exist
-const fs = require("fs");
+// Ensure uploads directory exists
 const uploadsDir = path.join(__dirname, "uploads");
 if (!fs.existsSync(uploadsDir)) {
-  fs.mkdirSync(uploadsDir);
+  fs.mkdirSync(uploadsDir, { recursive: true });
 }
 
-// Serve static files from uploads directory
+// Make sure to serve static files
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // Routes
